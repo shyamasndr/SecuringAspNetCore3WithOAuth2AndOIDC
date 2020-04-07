@@ -26,7 +26,7 @@ namespace Marvin.IDP
                      new Claim("address", "Main Road 1"),
                      new Claim("role", "FreeUser"),
                      new Claim("subscriptionlevel", "FreeUser"),
-                     new Claim("country", "nl")
+                     new Claim("country", "nl"),
                  }
              },
              new TestUser
@@ -42,7 +42,7 @@ namespace Marvin.IDP
                      new Claim("address", "Big Street 2"),
                      new Claim("role", "PayingUser"),
                      new Claim("subscriptionlevel", "PayingUser"),
-                     new Claim("country", "be")
+                     new Claim("country", "be"),
                  }
              }
          };

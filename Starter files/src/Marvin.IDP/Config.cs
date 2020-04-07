@@ -13,7 +13,9 @@ namespace Marvin.IDP
             new IdentityResource[]
             { 
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile()
+                new IdentityResources.Profile(),
+                new IdentityResources.Address(),
+                new IdentityResource("roles","Your roles",new List<string>() { "role" })
             };
 
         public static IEnumerable<ApiResource> Apis =>
@@ -28,6 +30,7 @@ namespace Marvin.IDP
                       ClientName="Image Gallery",
                       ClientId="imagegalleryclient",
                       AllowedGrantTypes=GrantTypes.Code,
+                      RequirePkce=true,
                       RedirectUris =new List<string>()
                       {
                           "https://localhost:44389/signin-oidc"
@@ -39,7 +42,8 @@ namespace Marvin.IDP
                       AllowedScopes= 
                       {
                           IdentityServerConstants.StandardScopes.OpenId,
-                          IdentityServerConstants.StandardScopes.Profile
+                          IdentityServerConstants.StandardScopes.Profile,
+                          IdentityServerConstants.StandardScopes.Address,"roles"
                       },
                       ClientSecrets=
                       {

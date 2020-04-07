@@ -1,4 +1,5 @@
-﻿using ImageGallery.Client.ViewModels;
+﻿using IdentityModel.Client;
+using ImageGallery.Client.ViewModels;
 using ImageGallery.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -186,6 +187,25 @@ namespace ImageGallery.Client.Controllers
         public async Task Logout() {
              await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
              await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
+        }
+        
+        [Authorize(Roles = "PayingUser")]
+        public async Task<ActionResult> OrderFrame()
+        {
+            var ipdClient = _httpClientFactory.CreateClient("IDPClient");
+            var metaDataResponse = await ipdClient.GetDiscoveryDocumentAsync();
+            if(metaDataResponse.IsError)
+            {
+                throw new Exception("Unable to accees openid endpoit",metaDataResponse.Exception);
+            }
+            var accessToken= await HttpContext.GetTokenAsync(OpenIdConnectParameterNames.AccessToken);
+            var userinfo= await ipdClient.GetUserInfoAsync(new UserInfoRequest{ 
+                Address=metaDataResponse.UserInfoEndpoint,
+                Token=accessToken
+            } );
+
+            var address = userinfo.Claims.FirstOrDefault(c=>c.Type=="address")?.Value;
+            return View(new OrderFrameViewModel(address));
         }
         public async Task WriteOutIdentityInformation()
         {
